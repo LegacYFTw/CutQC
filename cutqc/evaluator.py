@@ -5,14 +5,14 @@ from qiskit.converters import circuit_to_dag, dag_to_circuit
 from qiskit.circuit.library.standard_gates import HGate, SGate, SdgGate, XGate
 from qiskit.test.mock import FakeVigo
 
-from qiskit_helper_functions.non_ibmq_functions import read_dict, find_process_jobs, evaluate_circ
+from qiskit_helper_functions.non_ibmq_functions import read_dict, find_process_jobs, evaluate_circ, get_alloted_backend
 
 from pytket.routing import Architecture, route, place_with_map
 from pytket.transform import Transform
 from pytket.routing import Placement, LinePlacement, GraphPlacement, NoiseAwarePlacement
 from pytket.extensions.qiskit import qiskit_to_tk, tk_to_qiskit
 
-def run_subcircuit_instances(subcircuits,subcircuit_instances,eval_mode,num_shots_fn):
+def run_subcircuit_instances(subcircuits,subcircuit_instances,eval_mode,num_shots_fn,tket=False):
     '''
     subcircuit_instance_probs[subcircuit_idx][subcircuit_instance_idx] = measured probability
     '''
@@ -27,7 +27,11 @@ def run_subcircuit_instances(subcircuits,subcircuit_instances,eval_mode,num_shot
                 subcircuit_instance = modify_subcircuit_instance(
                     subcircuit=subcircuits[subcircuit_idx],
                     init=init_meas[0],meas=init_meas[1])
-                subcircuit_inst_prob = simulate_subcircuit(subcircuit=subcircuit_instance,eval_mode=eval_mode,num_shots=num_shots)
+                # subcircuit_inst_prob = simulate_subcircuit(subcircuit=subcircuit_instance,eval_mode=eval_mode,num_shots=num_shots)
+                if  type(eval_mode) is dict:
+                    subcircuit_inst_prob = simulate_subcircuit(subcircuit=subcircuit_instance,eval_mode=get_alloted_backend(eval_mode, subcircuits[subcircuit_idx]),num_shots=num_shots, tket=tket)
+                else:
+                    subcircuit_inst_prob = simulate_subcircuit(subcircuit=subcircuit_instance,eval_mode=eval_mode,num_shots=num_shots, tket=tket)
                 mutated_meas = mutate_measurement_basis(meas=init_meas[1])
                 for meas in mutated_meas:
                     measured_prob = measure_prob(unmeasured_prob=subcircuit_inst_prob,meas=meas)
@@ -35,6 +39,7 @@ def run_subcircuit_instances(subcircuits,subcircuit_instances,eval_mode,num_shot
                     subcircuit_instance_probs[subcircuit_idx][mutated_subcircuit_instance_idx] = measured_prob
                     # print('Measured instance %d'%mutated_subcircuit_instance_idx)
     return subcircuit_instance_probs
+
 
 def mutate_measurement_basis(meas):
     '''
