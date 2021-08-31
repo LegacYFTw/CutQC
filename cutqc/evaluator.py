@@ -7,6 +7,11 @@ from qiskit.test.mock import FakeVigo
 
 from qiskit_helper_functions.non_ibmq_functions import read_dict, find_process_jobs, evaluate_circ
 
+from pytket.routing import Architecture, route, place_with_map
+from pytket.transform import Transform
+from pytket.routing import Placement, LinePlacement, GraphPlacement, NoiseAwarePlacement
+from pytket.extensions.qiskit import qiskit_to_tk, tk_to_qiskit
+
 def run_subcircuit_instances(subcircuits,subcircuit_instances,eval_mode,num_shots_fn):
     '''
     subcircuit_instance_probs[subcircuit_idx][subcircuit_instance_idx] = measured probability
@@ -98,10 +103,8 @@ def simulate_subcircuit(subcircuit,eval_mode,num_shots):
         subcircuit_inst_prob = evaluate_circ(circuit=subcircuit,backend='statevector_simulator')
     elif eval_mode=='qasm':
         subcircuit_inst_prob = evaluate_circ(circuit=subcircuit,backend='noiseless_qasm_simulator',options={'num_shots':num_shots})
-    elif eval_mode=='FakeVigo':
-        subcircuit_inst_prob = evaluate_circ(circuit=subcircuit,backend=FakeVigo(),options={'num_shots':num_shots})
     else:
-        raise NotImplementedError
+        subcircuit_inst_prob = evaluate_circ(circuit=subcircuit,backend=eval_mode,options={'num_shots':num_shots}, TKET=tket)
     return subcircuit_inst_prob
 
 def measure_prob(unmeasured_prob,meas):

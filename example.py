@@ -70,7 +70,7 @@ if __name__ == '__main__':
     } # Option 2: manually specify subcircuit partitions
     task_3 = {
         'name':'supremacy',
-        'circuit':generate_circ(full_circ_size=20,circuit_type='supremacy'),
+        'circuit':generate_circ(20, depth=12,circuit_type='supremacy'),
         'kwargs':dict(
             max_subcircuit_width=12,
             max_subcircuit_cuts=10,
@@ -82,14 +82,14 @@ if __name__ == '__main__':
     }
     task_4 = {
         'name':'BV_manual',
-        'circuit':generate_circ(full_circ_size=8,circuit_type='bv'),
+        'circuit':generate_circ(20, depth=8,circuit_type='bv'),
         'kwargs':dict(
             subcircuit_vertices=[[0,1,2,3],[4,5,6]]
         )
     }
     task_5 = {
         'name':'BV',
-        'circuit':generate_circ(full_circ_size=6,circuit_type='bv'),
+        'circuit':generate_circ(20, depth=6,circuit_type='bv'),
         'kwargs':dict(
             max_subcircuit_width=4,
             max_subcircuit_cuts=10,
