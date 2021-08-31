@@ -6,6 +6,8 @@ from cutqc.evaluator import run_subcircuit_instances
 from cutqc.post_process import generate_summation_terms, build
 from cutqc.verify import verify
 
+from qiskit.test.mock import FakeVigo
+
 class CutQC:
     '''
     The main module for CutQC
