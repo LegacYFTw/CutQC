@@ -99,12 +99,12 @@ def simulate_subcircuit(subcircuit,eval_mode,num_shots):
     '''
     Simulate a subcircuit
     '''
-    if eval_mode=='sv':
-        subcircuit_inst_prob = evaluate_circ(circuit=subcircuit,backend='statevector_simulator')
-    elif eval_mode=='qasm':
-        subcircuit_inst_prob = evaluate_circ(circuit=subcircuit,backend='noiseless_qasm_simulator',options={'num_shots':num_shots})
-    else:
-        subcircuit_inst_prob = evaluate_circ(circuit=subcircuit,backend=eval_mode,options={'num_shots':num_shots}, TKET=tket)
+    # if eval_mode=='sv':
+    #     subcircuit_inst_prob = evaluate_circ(circuit=subcircuit,backend='statevector_simulator')
+    # elif eval_mode=='qasm':
+    #     subcircuit_inst_prob = evaluate_circ(circuit=subcircuit,backend='noiseless_qasm_simulator',options={'num_shots':num_shots})
+    # else:
+    subcircuit_inst_prob = evaluate_circ(circuit=subcircuit,backend=eval_mode,options={'num_shots':num_shots}, TKET=tket)
     return subcircuit_inst_prob
 
 def measure_prob(unmeasured_prob,meas):
