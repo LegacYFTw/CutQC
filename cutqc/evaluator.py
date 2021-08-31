@@ -100,7 +100,7 @@ def modify_subcircuit_instance(subcircuit, init, meas):
     subcircuit_instance_circuit = dag_to_circuit(subcircuit_instance_dag)
     return subcircuit_instance_circuit
 
-def simulate_subcircuit(subcircuit,eval_mode,num_shots):
+def simulate_subcircuit(subcircuit,eval_mode,num_shots,tket=False):
     '''
     Simulate a subcircuit
     '''
