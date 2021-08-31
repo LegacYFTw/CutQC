@@ -3,6 +3,7 @@ import numpy as np
 from time import time
 from qiskit.converters import circuit_to_dag, dag_to_circuit
 from qiskit.circuit.library.standard_gates import HGate, SGate, SdgGate, XGate
+from qiskit.test.mock import FakeVigo
 
 from qiskit_helper_functions.non_ibmq_functions import read_dict, find_process_jobs, evaluate_circ
 
@@ -97,6 +98,8 @@ def simulate_subcircuit(subcircuit,eval_mode,num_shots):
         subcircuit_inst_prob = evaluate_circ(circuit=subcircuit,backend='statevector_simulator')
     elif eval_mode=='qasm':
         subcircuit_inst_prob = evaluate_circ(circuit=subcircuit,backend='noiseless_qasm_simulator',options={'num_shots':num_shots})
+    elif eval_mode=='FakeVigo':
+        subcircuit_inst_prob = evaluate_circ(circuit=subcircuit,backend=FakeVigo(),options={'num_shots':num_shots})
     else:
         raise NotImplementedError
     return subcircuit_inst_prob
